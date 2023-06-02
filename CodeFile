@@ -1,0 +1,37 @@
+# Import the necessary libraries
+import cv2             # Library for image processing
+import numpy as np     # Library for numerical operations
+import matplotlib.pyplot as plt   # Library for plotting
+from sklearn.cluster import KMeans   # KMeans algorithm from scikit-learn
+
+# Load the image
+image_path = 'C:\\Users\\Dhekra Hajji\\OneDrive - CXG\\Bureau\\horse.jpg'
+image = cv2.imread(image_path)
+
+# Convert the image from BGR to RGB
+image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+
+# Reshape the image to a 2D array of pixels
+pixels = image.reshape(-1, 3)
+
+# Define the number of clusters (colors) to extract
+num_colors = 5
+
+# Apply k-means clustering to the pixel data
+kmeans = KMeans(n_clusters=num_colors)
+kmeans.fit(pixels)
+
+# Get the RGB values of the cluster centers (colors)
+colors = kmeans.cluster_centers_
+
+# Convert the colors to integers
+colors = colors.astype(int)
+
+# Display the dominant colors
+plt.figure(figsize=(8, 2))
+for color in colors:
+    color_patch = np.zeros((100, 100, 3), dtype=np.uint8)
+    color_patch[:, :] = color
+    plt.imshow(color_patch)
+    plt.axis('off')
+    plt.show()
